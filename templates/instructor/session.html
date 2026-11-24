@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ attendance_session.course_code }} Session - QR Attendance{% endblock %}
+{% block content %}
+<section class="card"
+         id="session-panel"
+         data-qr-url="{{ url_for('instructor.session_qr', session_id=attendance_session.id) }}"
+         data-attendance-url="{{ url_for('instructor.session_attendance', session_id=attendance_session.id) }}"
+         data-end-url="{{ url_for('instructor.end_session', session_id=attendance_session.id) }}"
+         data-refresh-seconds="{{ refresh_seconds }}">
+    <h2>{{ attendance_session.course_code }} - {{ attendance_session.course_title }}</h2>
+    <p>Status: <strong id="session-status">{{ attendance_session.status }}</strong></p>
+
+    <div class="qr-frame">
+        <img id="qr-image" alt="Attendance QR code" hidden>
+        <p id="qr-placeholder">Loading QR code...</p>
+    </div>
+    <p class="hint">The code refreshes every {{ refresh_seconds }} seconds. Each code is valid for 45 seconds.</p>
+
+    <dl class="stats">
+        <div><dt>Present</dt><dd id="present-count">0</dd></div>
+        <div><dt>Enrolled</dt><dd id="total-enrolled">0</dd></div>
+        <div><dt>Attendance</dt><dd><span id="attendance-rate">0</span>%</dd></div>
+        <div><dt>Absenteeism</dt><dd><span id="absenteeism-rate">0</span>%</dd></div>
+    </dl>
+
+    <div class="actions">
+        <button type="button" id="end-session"{% if attendance_session.status != 'active' %} hidden{% endif %}>End session</button>
+        <a class="button" href="{{ url_for('instructor.export_session', session_id=attendance_session.id) }}">Export CSV</a>
+    </div>
+    <p id="session-message" class="message" hidden></p>
+</section>
+
+<section class="card">
+    <h3>Checked-in Students</h3>
+    <table class="data-table">
+        <thead><tr><th>Student ID</th><th>Name</th><th>Checked in</th></tr></thead>
+        <tbody id="attendance-list"></tbody>
+    </table>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/session.js') }}"></script>
+{% endblock %}

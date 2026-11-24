@@ -1,6 +1,7 @@
 """Check-in validation, attendance statistics, and roster export."""
 import csv
 import io
+import secrets
 import time
 
 from repositories import (
@@ -91,6 +92,22 @@ def _ensure_unique(session_id, student_pk, device_token):
         raise ProxyDeviceError(
             "This device has already been used to check in another student."
         )
+
+
+def generate_device_token():
+    return secrets.token_urlsafe(32)
+
+
+def list_checked_in_students(session_id):
+    session_service.get_session(session_id)
+    return [
+        {
+            "student_id": record["institution_id"],
+            "full_name": record["full_name"],
+            "checked_in_at": record["checked_in_at"],
+        }
+        for record in attendance_repository.list_records_by_session(session_id)
+    ]
 
 
 def get_session_stats(session_id):

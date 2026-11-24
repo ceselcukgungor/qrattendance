@@ -23,3 +23,46 @@ body {
     padding: 1.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
+
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.site-nav { display: flex; align-items: center; gap: 1rem; }
+.site-nav a { color: #ffffff; }
+.inline-form { display: inline; margin: 0; }
+
+.card + .card { margin-top: 1.5rem; }
+.card.narrow { max-width: 420px; margin: 0 auto; }
+
+label { display: block; margin: 0.75rem 0 0.25rem; font-weight: 600; }
+input { width: 100%; padding: 0.6rem; border: 1px solid #c3cad3; border-radius: 6px; font-size: 1rem; }
+
+button, .button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.1rem;
+    border: none;
+    border-radius: 6px;
+    background: #1f3a5f;
+    color: #ffffff;
+    font-size: 0.95rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+button:disabled { opacity: 0.6; cursor: default; }
+.site-nav button, .data-table button, .data-table .button { margin-top: 0; }
+
+.message { padding: 0.75rem; border-radius: 6px; background: #e8eef5; }
+.message.error { background: #fdecea; color: #8a1c13; }
+.message.success { background: #e6f4ea; color: #1e5e30; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 0.6rem; border-bottom: 1px solid #e4e7eb; text-align: left; }
+
+.qr-frame { display: flex; justify-content: center; align-items: center; min-height: 320px; }
+.qr-frame img { width: 320px; height: 320px; image-rendering: pixelated; }
+.hint { text-align: center; color: #52606d; }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.5rem 0 0; }
+.stats div { text-align: center; }
+.stats dt { color: #52606d; font-size: 0.85rem; }
+.stats dd { margin: 0.25rem 0 0; font-size: 1.5rem; font-weight: 700; }
+.actions { display: flex; gap: 0.75rem; }

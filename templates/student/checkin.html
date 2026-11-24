@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Check In - QR Attendance{% endblock %}
+{% block content %}
+<section class="card narrow">
+    <h2>Attendance Check-In</h2>
+    {% if token %}
+    <form id="checkin-form" data-checkin-url="{{ url_for('student.checkin') }}">
+        <input type="hidden" id="token" value="{{ token }}">
+        <label for="student_id">Student ID</label>
+        <input id="student_id" name="student_id" autocomplete="username" required autofocus>
+        <button type="submit">Check in</button>
+    </form>
+    <p id="checkin-message" class="message" hidden></p>
+    {% else %}
+    <p class="message error">No QR token was provided. Scan the QR code shown by your instructor.</p>
+    {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/checkin.js') }}"></script>
+{% endblock %}

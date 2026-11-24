@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My Courses - QR Attendance{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>My Courses</h2>
+    <p id="dashboard-message" class="message" hidden></p>
+    {% if courses %}
+    <table class="data-table">
+        <thead>
+            <tr><th>Code</th><th>Title</th><th>Enrolled</th><th></th></tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.code }}</td>
+                <td>{{ course.title }}</td>
+                <td>{{ course.enrolled }}</td>
+                <td>
+                    {% if course.active_session_id %}
+                    <a class="button" href="{{ url_for('instructor.session_page', session_id=course.active_session_id) }}">Open active session</a>
+                    {% else %}
+                    <button type="button" class="start-session" data-course-id="{{ course.id }}">Start session</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No courses are assigned to you.</p>
+    {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

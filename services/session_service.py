@@ -28,6 +28,13 @@ def _require_owned_course(instructor_id, course_id):
     return course
 
 
+def get_owned_session(instructor_id, session_id):
+    """Return the session with its course, if the instructor teaches that course."""
+    session = get_session(session_id)
+    course = _require_owned_course(instructor_id, session["course_id"])
+    return {**session, "course_code": course["code"], "course_title": course["title"]}
+
+
 def start_session(instructor_id, course_id):
     """Start a session for the course, or return the one already active."""
     _require_owned_course(instructor_id, course_id)

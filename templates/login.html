@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Instructor Login - QR Attendance{% endblock %}
+{% block content %}
+<section class="card narrow">
+    <h2>Instructor Login</h2>
+    {% if error %}<p class="message error">{{ error }}</p>{% endif %}
+    <form method="post" action="{{ url_for('auth.login') }}">
+        <label for="institution_id">Instructor ID</label>
+        <input id="institution_id" name="institution_id" value="{{ institution_id or '' }}" required autofocus>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
+        <button type="submit">Log in</button>
+    </form>
+</section>
+{% endblock %}

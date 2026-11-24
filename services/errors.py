@@ -11,6 +11,10 @@ class ServiceError(Exception):
         self.message = message
 
 
+class AuthenticationError(ServiceError):
+    code = "authentication_failed"
+
+
 class NotFoundError(ServiceError):
     code = "not_found"
 

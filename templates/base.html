@@ -9,6 +9,15 @@
 <body>
     <header class="site-header">
         <h1>QR Attendance</h1>
+        {% if instructor %}
+        <nav class="site-nav">
+            <span>{{ instructor.full_name }}</span>
+            <a href="{{ url_for('instructor.dashboard') }}">Courses</a>
+            <form method="post" action="{{ url_for('auth.logout') }}" class="inline-form">
+                <button type="submit">Log out</button>
+            </form>
+        </nav>
+        {% endif %}
     </header>
     <main class="container">
         {% block content %}{% endblock %}
