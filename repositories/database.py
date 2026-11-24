@@ -13,6 +13,10 @@ _database_path = os.path.join(
 )
 
 
+class DuplicateRecordError(Exception):
+    """Raised when an insert violates a uniqueness constraint."""
+
+
 def configure_database(path):
     global _database_path
     _database_path = path
@@ -25,8 +29,7 @@ def get_database_path():
 def _connect():
     connection = sqlite3.connect(_database_path, timeout=10)
     connection.row_factory = sqlite3.Row
-    # WAL allows concurrent readers while a writer is active.
-    connection.execute("PRAGMA journal_mode=WAL")
+    connection.execute("PRAGMA journal_mode=WAL;")
     connection.execute("PRAGMA foreign_keys=ON")
     connection.execute("PRAGMA busy_timeout=5000")
     return connection

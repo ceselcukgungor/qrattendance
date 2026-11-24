@@ -45,23 +45,24 @@ CREATE TABLE IF NOT EXISTS sessions (
     FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE
 );
 
--- Rotating QR tokens; each token has a server-side TTL (expires_at = issued_at + 45).
+-- Rotating QR tokens; validity (TTL) is derived from created_at in the service layer.
 CREATE TABLE IF NOT EXISTS qr_tokens (
     id              INTEGER PRIMARY KEY,
     session_id      INTEGER     NOT NULL,
     token           VARCHAR(64) NOT NULL UNIQUE,
-    issued_at       DOUBLE PRECISION NOT NULL,
-    expires_at      DOUBLE PRECISION NOT NULL,
+    created_at      DOUBLE PRECISION NOT NULL,
     FOREIGN KEY (session_id) REFERENCES sessions (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS attendance_records (
     id              INTEGER PRIMARY KEY,
-    session_id      INTEGER NOT NULL,
-    student_id      INTEGER NOT NULL,
+    session_id      INTEGER      NOT NULL,
+    student_id      INTEGER      NOT NULL,
     token_id        INTEGER,
-    recorded_at     DOUBLE PRECISION NOT NULL,
+    device_token    VARCHAR(128) NOT NULL,
+    checked_in_at   DOUBLE PRECISION NOT NULL,
     UNIQUE (session_id, student_id),
+    UNIQUE (session_id, device_token),
     FOREIGN KEY (session_id) REFERENCES sessions (id)  ON DELETE CASCADE,
     FOREIGN KEY (student_id) REFERENCES users (id)     ON DELETE CASCADE,
     FOREIGN KEY (token_id)   REFERENCES qr_tokens (id) ON DELETE SET NULL
@@ -71,4 +72,5 @@ CREATE INDEX IF NOT EXISTS idx_courses_instructor   ON courses (instructor_id);
 CREATE INDEX IF NOT EXISTS idx_enrollments_student  ON course_enrollments (student_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_course      ON sessions (course_id);
 CREATE INDEX IF NOT EXISTS idx_qr_tokens_session    ON qr_tokens (session_id);
+CREATE INDEX IF NOT EXISTS idx_qr_tokens_created    ON qr_tokens (created_at);
 CREATE INDEX IF NOT EXISTS idx_attendance_student   ON attendance_records (student_id);

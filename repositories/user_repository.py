@@ -25,7 +25,15 @@ def get_user_by_id(user_id):
 
 
 def get_user_by_institution_id(institution_id):
-    """Includes password_hash so the service layer can verify credentials."""
+    with get_connection() as connection:
+        row = connection.execute(
+            f"SELECT {_PUBLIC_COLUMNS} FROM users WHERE institution_id = ?", (institution_id,)
+        ).fetchone()
+        return row_to_dict(row)
+
+
+def get_credentials_by_institution_id(institution_id):
+    """Return the full row including password_hash, for authentication only."""
     with get_connection() as connection:
         row = connection.execute(
             "SELECT * FROM users WHERE institution_id = ?", (institution_id,)
@@ -39,3 +47,17 @@ def list_users_by_role(role):
             f"SELECT {_PUBLIC_COLUMNS} FROM users WHERE role = ? ORDER BY full_name", (role,)
         ).fetchall()
         return [dict(row) for row in rows]
+
+
+def update_user(user_id, full_name, email):
+    with get_connection() as connection:
+        cursor = connection.execute(
+            "UPDATE users SET full_name = ?, email = ? WHERE id = ?", (full_name, email, user_id)
+        )
+        return cursor.rowcount
+
+
+def delete_user(user_id):
+    with get_connection() as connection:
+        cursor = connection.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        return cursor.rowcount

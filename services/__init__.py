@@ -1,1 +1,1 @@
-"""Business logic layer: domain rules. Services call repositories only."""
+"""Business logic layer. Services depend on repositories only."""

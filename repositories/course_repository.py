@@ -35,6 +35,15 @@ def enroll_student(course_id, student_id):
         )
 
 
+def unenroll_student(course_id, student_id):
+    with get_connection() as connection:
+        cursor = connection.execute(
+            "DELETE FROM course_enrollments WHERE course_id = ? AND student_id = ?",
+            (course_id, student_id),
+        )
+        return cursor.rowcount
+
+
 def is_student_enrolled(course_id, student_id):
     with get_connection() as connection:
         row = connection.execute(
@@ -42,6 +51,14 @@ def is_student_enrolled(course_id, student_id):
             (course_id, student_id),
         ).fetchone()
         return row is not None
+
+
+def count_enrolled_students(course_id):
+    with get_connection() as connection:
+        row = connection.execute(
+            "SELECT COUNT(*) FROM course_enrollments WHERE course_id = ?", (course_id,)
+        ).fetchone()
+        return row[0]
 
 
 def list_courses_by_student(student_id):
